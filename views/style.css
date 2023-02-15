@@ -1,0 +1,43 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0d5e5;
+}
+
+textarea#textbox {
+    width: 500px;
+    height: 200px;
+    font-size: 16px;
+    padding: 10px;
+    margin: 20px auto;
+    display: block;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+form {
+    width: 500px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+form input[type="text"], select {
+    font-size: 16px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #af4c66;
+    color: #fff;
+    border-radius: 5px;
+    border: none;
+}
+
+form button:hover {
+    background-color: #8e3e6d;
+}
