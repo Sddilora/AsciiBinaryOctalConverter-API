@@ -25,7 +25,7 @@ func main() {
 	app.Post("/convert", func(c *fiber.Ctx) error {
 
 		type Result struct {
-			Output string `json:"output"`
+			Output string `json:"data"`
 		}
 
 		var res Result
@@ -39,12 +39,6 @@ func main() {
 		var reqBody RequestBody
 
 		if err := c.BodyParser(&reqBody); err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"error": "Bad Request",
-			})
-		}
-
-		if err := c.BodyParser(&res); err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error": "Bad Request",
 			})
@@ -111,9 +105,10 @@ func main() {
 
 }
 
+var output string = "helo"
+
 // ASCII to Binary
 func asciiToBinary(input string) string {
-	output := ""
 
 	for _, c := range input {
 
