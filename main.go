@@ -11,18 +11,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
-var err error
-
-type Result struct {
-	Output string `json:"output"`
-}
-
-type RequestBody struct {
-	Value      string `json:"value"`
-	SourceType string `json:"sourceType"`
-	DestType   string `json:"destType"`
-}
-
 func main() {
 
 	app := fiber.New()
@@ -34,28 +22,39 @@ func main() {
 		AllowOrigins:     "*",
 	}))
 
-	var reqBody RequestBody
-
 	app.Post("/convert", func(c *fiber.Ctx) error {
 
-		// value := c.FormValue("value")
-		// sourceType := c.FormValue("sourceTypeValue")
-		// destType := c.FormValue("destTypeValue")
+		type Result struct {
+			Output string `json:"output"`
+		}
 
-		// Here, you can access reqBody.DestType and use it in your conversion logic
+		var res Result
 
-		// return ctx.JSON(fiber.Map{
-		// 	"message": fmt.Sprintf("%v %s converted to %s", reqBody.Value, reqBody.SourceType, reqBody.DestType),
-		// })
+		type RequestBody struct {
+			Value      string `json:"value"`
+			SourceType string `json:"sourceTypeValue"`
+			DestType   string `json:"destTypeValue"`
+		}
+
+		var reqBody RequestBody
+
+		if err := c.BodyParser(&reqBody); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": "Bad Request",
+			})
+		}
+
+		if err := c.BodyParser(&res); err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": "Bad Request",
+			})
+		}
 
 		if reqBody.SourceType == "ascii" && reqBody.DestType == "binary" {
-			asciiInput := reqBody.Value //c.Params(reqBody.Value)
+			asciiInput := reqBody.Value
 			binaryResult := asciiToBinary(asciiInput)
 
-			result := Result{Output: binaryResult}
-			jsonResult, _ := json.Marshal(result)
-
-			return c.SendString(string(jsonResult))
+			res.Output = binaryResult
 
 		} else if reqBody.SourceType == "ascii" && reqBody.DestType == "octal" {
 			asciiInput := c.Params(reqBody.Value)
@@ -104,10 +103,11 @@ func main() {
 
 		}
 
-		return err
+		return c.JSON(res.Output)
+
 	})
 
-	log.Fatal(app.Listen(":6020"))
+	log.Fatal(app.Listen(":6027"))
 
 }
 
@@ -247,3 +247,13 @@ var binaryValues []string
 			return c.JSON(responseJSON)
 
 */
+
+//value := c.FormValue("reqBody.value")
+//sourceType := c.FormValue("reqBody.SourceType")
+//destType := c.FormValue("reqBody.DestType")
+
+// Here, you can access reqBody.DestType and use it in your conversion logic
+
+// return ctx.JSON(fiber.Map{
+// 	"message": fmt.Sprintf("%v %s converted to %s", reqBody.Value, reqBody.SourceType, reqBody.DestType),
+// })
