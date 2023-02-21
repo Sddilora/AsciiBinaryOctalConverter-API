@@ -59,7 +59,7 @@ func main() {
 			c.Send(jsonResult)
 
 		} else if reqBody.SourceType == "binary" && reqBody.DestType == "ascii" {
-			binaryInput := reqBody.Value // c.Params(reqBody.Value)
+			binaryInput := reqBody.Value
 			asciiResult := binaryToAscii(binaryInput)
 
 			result := Result{Output: asciiResult}
@@ -70,7 +70,7 @@ func main() {
 			c.Send(jsonResult)
 
 		} else if reqBody.SourceType == "binary" && reqBody.DestType == "octal" {
-			binaryInput := reqBody.Value //c.Params(reqBody.Value)
+			binaryInput := reqBody.Value
 			octalResult := binaryToOctal(binaryInput)
 
 			result := Result{Output: octalResult}
@@ -81,7 +81,7 @@ func main() {
 			c.Send(jsonResult)
 
 		} else if reqBody.SourceType == "octal" && reqBody.DestType == "ascii" {
-			octalInput := reqBody.Value //c.Params(reqBody.Value)
+			octalInput := reqBody.Value
 			asciiResult := octalToAscii(octalInput)
 
 			result := Result{Output: asciiResult}
@@ -92,7 +92,7 @@ func main() {
 			c.Send(jsonResult)
 
 		} else if reqBody.SourceType == "octal" && reqBody.DestType == "binary" {
-			octalInput := reqBody.Value //c.Params(reqBody.Value)
+			octalInput := reqBody.Value
 			binaryResult := octalToBinary(octalInput)
 
 			result := Result{Output: binaryResult}
@@ -111,18 +111,15 @@ func main() {
 
 }
 
-var output string
+func asciiToBinary(input string) string { // ASCII to Binary
 
-// ASCII to Binary
-func asciiToBinary(input string) string {
-
-	output = ""
+	output := ""
 
 	for _, c := range input {
 
 		binary := strconv.FormatInt(int64(c), 2) // ASCII kodunu ikili sayıya çeviriyoruz
 
-		if len(binary) < 8 { // Eğer sayının uzunluğu 7 bit değilse başına sıfır ekliyoruz
+		if len(binary) < 8 { // Eğer sayının uzunluğu 8 bit değilse başına sıfır ekliyoruz
 			for i := len(binary); i < 8; i++ {
 				binary = "0" + binary
 			}
@@ -152,19 +149,28 @@ func asciiToOctal(input string) string { // ASCII to Octal
 	return output
 }
 
-// Binary to ASCII
-func binaryToAscii(input string) string {
+func binaryToAscii(input string) string { // Binary to ASCII
+
 	output := ""
 
-	// Her 7 karakter için ASCII karakterlerini birleştiriyoruz
-	for i := 0; i < len(input); i += 8 {
-		// Eğer son 7 karakterin uzunluğu 7'den az ise başına sıfır ekliyoruz
-		if i+8 > len(input) {
+	var inputholder []byte
+
+	for i := 0; i < len(input); i++ {
+
+		if string(input[i]) != " " {
+			inputholder = append(inputholder, input[i])
+		}
+	}
+
+	input = string(inputholder)
+
+	for i := 0; i < len(input); i += 8 { // Her 8 karakter için ASCII karakterlerini birleştiriyoruz
+
+		if i+8 > len(input) { // Eğer son 8 karakterin uzunluğu 8'den az ise başına sıfır ekliyoruz
 			input += strings.Repeat("0", i+8-len(input))
 		}
 
-		// 7 bitlik ikili sayıyı ASCII karakterine dönüştürüyoruz
-		binary := input[i : i+8]
+		binary := input[i : i+8] // 8 bitlik ikili sayıyı ASCII karakterine dönüştürüyoruz
 		ascii, _ := strconv.ParseInt(binary, 2, 64)
 		output += string(ascii) + " "
 	}
@@ -172,19 +178,27 @@ func binaryToAscii(input string) string {
 	return output
 }
 
-// Binary to Octal
-func binaryToOctal(input string) string {
+func binaryToOctal(input string) string { // Binary to Octal
 	output := ""
 
-	// Her 3 karakter için sekizli sayıları birleştiriyoruz
-	for i := 0; i < len(input); i += 3 {
-		// Eğer son 3 karakterin uzunluğu 3'ten az ise başına sıfır ekliyoruz
-		if i+3 > len(input) {
+	var inputholder []byte
+
+	for i := 0; i < len(input); i++ {
+
+		if string(input[i]) != " " {
+			inputholder = append(inputholder, input[i])
+		}
+	}
+
+	input = string(inputholder)
+
+	for i := 0; i < len(input); i += 3 { // Her 3 karakter için sekizli sayıları birleştiriyoruz
+
+		if i+3 > len(input) { // Eğer son 3 karakterin uzunluğu 3'ten az ise başına sıfır ekliyoruz
 			input += strings.Repeat("0", i+3-len(input))
 		}
 
-		// 3 bitlik ikili sayıyı sekizli sayıya dönüştürüyoruz
-		binary := input[i : i+3]
+		binary := string(input[i : i+3]) // 3 bitlik ikili sayıyı sekizli sayıya dönüştürüyoruz
 		octal, _ := strconv.ParseInt(binary, 2, 64)
 		output += strconv.FormatInt(octal, 8) + " "
 	}
@@ -192,19 +206,27 @@ func binaryToOctal(input string) string {
 	return output
 }
 
-// Octal to ASCII
-func octalToAscii(input string) string {
+func octalToAscii(input string) string { // Octal to ASCII
 	output := ""
 
-	// Her 2 karakter için ASCII karakterlerini birleştiriyoruz
-	for i := 0; i < len(input); i += 2 {
-		// Eğer son 2 karakterin uzunluğu 2'den az ise başına sıfır ekliyoruz
-		if i+2 > len(input) {
+	var inputholder []byte
+
+	for i := 0; i < len(input); i++ {
+
+		if string(input[i]) != " " {
+			inputholder = append(inputholder, input[i])
+		}
+	}
+
+	input = string(inputholder)
+
+	for i := 0; i < len(input); i += 2 { // Her 2 karakter için ASCII karakterlerini birleştiriyoruz
+
+		if i+2 > len(input) { // Eğer son 2 karakterin uzunluğu 2'den az ise başına sıfır ekliyoruz
 			input += strings.Repeat("0", i+2-len(input))
 		}
 
-		// 2 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
-		octal := input[i : i+2]
+		octal := input[i : i+2] // 2 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
 		ascii, _ := strconv.ParseInt(octal, 8, 64)
 		output += string(ascii) + " "
 	}
@@ -212,14 +234,23 @@ func octalToAscii(input string) string {
 	return output
 }
 
-// Octal to Binary
-func octalToBinary(input string) string {
+func octalToBinary(input string) string { // Octal to Binary
 	output := ""
 
-	// Her 1 karakter için 3 bitlik ikili sayıları birleştiriyoruz
-	for _, c := range input {
-		// Sekizli sayıyı 3 bitlik ikili sayıya dönüştürüyoruz
-		octal := string(c)
+	var inputholder []byte
+
+	for i := 0; i < len(input); i++ {
+
+		if string(input[i]) != " " {
+			inputholder = append(inputholder, input[i])
+		}
+	}
+
+	input = string(inputholder)
+
+	for _, c := range input { // Her 1 karakter için 3 bitlik ikili sayıları birleştiriyoruz
+
+		octal := string(c) // Sekizli sayıyı 3 bitlik ikili sayıya dönüştürüyoruz
 		binary := strconv.FormatInt(int64(octal[0]-'0'), 2)
 		for i := 1; i < len(octal); i++ {
 			digit := octal[i] - '0'
@@ -227,39 +258,8 @@ func octalToBinary(input string) string {
 			binary += padded
 		}
 
-		// 3 bitlik ikili sayıları birleştiriyoruz
-		output += binary + " "
+		output += binary + " " // 3 bitlik ikili sayıları birleştiriyoruz
 	}
 
 	return output
 }
-
-/*var octalValues []string
-for i := 0; i < len(input); i++ {
-	decimalValue := int(input[i])
-	octalValue := strconv.FormatInt(int64(decimalValue), 8)
-	octalValues = append(octalValues, octalValue)
-}
-responseJSON := octalValues
-return c.JSON(responseJSON)
-
-var binaryValues []string
-			for i := 0; i < len(input); i++ {
-				decimalValue := int(input[i])
-				binaryValue := strconv.FormatInt(int64(decimalValue), 2)
-				binaryValues = append(binaryValues, binaryValue)
-			}
-			responseJSON := binaryValues
-			return c.JSON(responseJSON)
-
-*/
-
-//value := c.FormValue("reqBody.value")
-//sourceType := c.FormValue("reqBody.SourceType")
-//destType := c.FormValue("reqBody.DestType")
-
-// Here, you can access reqBody.DestType and use it in your conversion logic
-
-// return ctx.JSON(fiber.Map{
-// 	"message": fmt.Sprintf("%v %s converted to %s", reqBody.Value, reqBody.SourceType, reqBody.DestType),
-// })
