@@ -15,25 +15,18 @@ func main() {
 
 	app := fiber.New()
 
-	app.Use(cors.New(cors.Config{
-		AllowCredentials: true,
-		AllowHeaders:     "Origin, Content-Type, Accept",
-		AllowMethods:     "GET, POST",
-		AllowOrigins:     "*",
-	}))
+	app.Use(cors.New())
 
 	app.Post("/convert", func(c *fiber.Ctx) error {
 
 		type Result struct {
-			Output string `json:"data"`
+			Output string `json:"message"`
 		}
-
-		var res Result
 
 		type RequestBody struct {
 			Value      string `json:"value"`
-			SourceType string `json:"sourceTypeValue"`
-			DestType   string `json:"destTypeValue"`
+			SourceType string `json:"sourceType"`
+			DestType   string `json:"destType"`
 		}
 
 		var reqBody RequestBody
@@ -47,17 +40,23 @@ func main() {
 		if reqBody.SourceType == "ascii" && reqBody.DestType == "binary" {
 			asciiInput := reqBody.Value
 			binaryResult := asciiToBinary(asciiInput)
+			result := Result{Output: binaryResult}
+			jsonResult, _ := json.Marshal(result)
 
-			res.Output = binaryResult
+			c.Type("application/json")
+
+			c.Send(jsonResult)
 
 		} else if reqBody.SourceType == "ascii" && reqBody.DestType == "octal" {
-			asciiInput := c.Params(reqBody.Value)
+			asciiInput := reqBody.Value
 			octalResult := asciiToOctal(asciiInput)
 
 			result := Result{Output: octalResult}
 			jsonResult, _ := json.Marshal(result)
 
-			return c.SendString(string(jsonResult))
+			c.Type("application/json")
+
+			c.Send(jsonResult)
 
 		} else if reqBody.SourceType == "binary" && reqBody.DestType == "ascii" {
 			binaryInput := reqBody.Value // c.Params(reqBody.Value)
@@ -66,7 +65,9 @@ func main() {
 			result := Result{Output: asciiResult}
 			jsonResult, _ := json.Marshal(result)
 
-			return c.SendString(string(jsonResult))
+			c.Type("application/json")
+
+			c.Send(jsonResult)
 
 		} else if reqBody.SourceType == "binary" && reqBody.DestType == "octal" {
 			binaryInput := reqBody.Value //c.Params(reqBody.Value)
@@ -75,7 +76,9 @@ func main() {
 			result := Result{Output: octalResult}
 			jsonResult, _ := json.Marshal(result)
 
-			return c.SendString(string(jsonResult))
+			c.Type("application/json")
+
+			c.Send(jsonResult)
 
 		} else if reqBody.SourceType == "octal" && reqBody.DestType == "ascii" {
 			octalInput := reqBody.Value //c.Params(reqBody.Value)
@@ -84,7 +87,9 @@ func main() {
 			result := Result{Output: asciiResult}
 			jsonResult, _ := json.Marshal(result)
 
-			return c.SendString(string(jsonResult))
+			c.Type("application/json")
+
+			c.Send(jsonResult)
 
 		} else if reqBody.SourceType == "octal" && reqBody.DestType == "binary" {
 			octalInput := reqBody.Value //c.Params(reqBody.Value)
@@ -93,19 +98,20 @@ func main() {
 			result := Result{Output: binaryResult}
 			jsonResult, _ := json.Marshal(result)
 
-			return c.SendString(string(jsonResult))
+			c.Type("application/json")
+
+			c.Send(jsonResult)
 
 		}
 
-		return c.JSON(res.Output)
-
+		return nil
 	})
 
 	log.Fatal(app.Listen(":6027"))
 
 }
 
-var output string = "helo"
+var output string
 
 // ASCII to Binary
 func asciiToBinary(input string) string {
@@ -125,6 +131,7 @@ func asciiToBinary(input string) string {
 }
 
 func asciiToOctal(input string) string { // ASCII to Octal
+
 	output := ""
 
 	for _, c := range input {
