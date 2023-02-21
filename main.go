@@ -116,15 +116,19 @@ var output string
 // ASCII to Binary
 func asciiToBinary(input string) string {
 
+	output = ""
+
 	for _, c := range input {
 
 		binary := strconv.FormatInt(int64(c), 2) // ASCII kodunu ikili sayıya çeviriyoruz
 
-		for len(binary) < 7 { // Eğer sayının uzunluğu 7 bit değilse başına sıfır ekliyoruz
-			binary = "0" + binary
+		if len(binary) < 8 { // Eğer sayının uzunluğu 7 bit değilse başına sıfır ekliyoruz
+			for i := len(binary); i < 8; i++ {
+				binary = "0" + binary
+			}
 		}
 
-		output += binary // Binary çıktısını birleştiriyoruz
+		output += binary + " " // Binary çıktısını birleştiriyoruz
 	}
 
 	return output
@@ -142,7 +146,7 @@ func asciiToOctal(input string) string { // ASCII to Octal
 			octal = "0" + octal
 		}
 
-		output += octal // Sekizli çıktısını birleştiriyoruz
+		output += octal + " " // Sekizli çıktısını birleştiriyoruz
 	}
 
 	return output
@@ -153,16 +157,16 @@ func binaryToAscii(input string) string {
 	output := ""
 
 	// Her 7 karakter için ASCII karakterlerini birleştiriyoruz
-	for i := 0; i < len(input); i += 7 {
+	for i := 0; i < len(input); i += 8 {
 		// Eğer son 7 karakterin uzunluğu 7'den az ise başına sıfır ekliyoruz
-		if i+7 > len(input) {
-			input += strings.Repeat("0", i+7-len(input))
+		if i+8 > len(input) {
+			input += strings.Repeat("0", i+8-len(input))
 		}
 
 		// 7 bitlik ikili sayıyı ASCII karakterine dönüştürüyoruz
-		binary := input[i : i+7]
+		binary := input[i : i+8]
 		ascii, _ := strconv.ParseInt(binary, 2, 64)
-		output += string(ascii)
+		output += string(ascii) + " "
 	}
 
 	return output
@@ -182,7 +186,7 @@ func binaryToOctal(input string) string {
 		// 3 bitlik ikili sayıyı sekizli sayıya dönüştürüyoruz
 		binary := input[i : i+3]
 		octal, _ := strconv.ParseInt(binary, 2, 64)
-		output += strconv.FormatInt(octal, 8)
+		output += strconv.FormatInt(octal, 8) + " "
 	}
 
 	return output
@@ -202,7 +206,7 @@ func octalToAscii(input string) string {
 		// 2 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
 		octal := input[i : i+2]
 		ascii, _ := strconv.ParseInt(octal, 8, 64)
-		output += string(ascii)
+		output += string(ascii) + " "
 	}
 
 	return output
@@ -224,7 +228,7 @@ func octalToBinary(input string) string {
 		}
 
 		// 3 bitlik ikili sayıları birleştiriyoruz
-		output += binary
+		output += binary + " "
 	}
 
 	return output
