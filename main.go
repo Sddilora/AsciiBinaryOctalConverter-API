@@ -8,6 +8,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+
+	"api/converters"
 )
 
 func main() {
@@ -38,7 +40,7 @@ func main() {
 
 		if reqBody.SourceType == "ascii" && reqBody.DestType == "binary" {
 			asciiInput := reqBody.Value
-			binaryResult := AsciiToBinary(asciiInput)
+			binaryResult := converters.AsciiToBinary(asciiInput)
 			result := Result{Output: binaryResult}
 			jsonResult, _ := json.Marshal(result)
 
@@ -108,26 +110,6 @@ func main() {
 
 	log.Fatal(app.Listen(":6027"))
 
-}
-
-func AsciiToBinary(input string) string { // ASCII to Binary
-
-	output := ""
-
-	for _, c := range input {
-
-		binary := strconv.FormatInt(int64(c), 2) // ASCII kodunu ikili sayıya çeviriyoruz
-
-		if len(binary) < 8 { // Eğer sayının uzunluğu 8 bit değilse başına sıfır ekliyoruz
-			for i := len(binary); i < 8; i++ {
-				binary = "0" + binary
-			}
-		}
-
-		output += binary + " " // Binary çıktısını birleştiriyoruz
-	}
-
-	return output
 }
 
 func AsciiToOctal(input string) string { // ASCII to Octal
