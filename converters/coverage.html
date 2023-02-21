@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>converters: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">api/converters/converters.go (93.1%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package converters
+
+import (
+        "strconv"
+        "strings"
+)
+
+func AsciiToBinary(input string) string <span class="cov8" title="1">{ // ASCII to Binary
+
+        output := ""
+
+        for _, c := range input </span><span class="cov8" title="1">{
+
+                binary := strconv.FormatInt(int64(c), 2) // ASCII kodunu ikili sayıya çeviriyoruz
+
+                if len(binary) &lt; 8 </span><span class="cov8" title="1">{ // Eğer sayının uzunluğu 8 bit değilse başına sıfır ekliyoruz
+                        for i := len(binary); i &lt; 8; i++ </span><span class="cov8" title="1">{
+                                binary = "0" + binary
+                        }</span>
+                }
+
+                <span class="cov8" title="1">output += binary + " "</span> // Binary çıktısını birleştiriyoruz
+        }
+
+        <span class="cov8" title="1">return output</span>
+}
+
+func AsciiToOctal(input string) string <span class="cov8" title="1">{ // ASCII to Octal
+
+        output := ""
+
+        for _, c := range input </span><span class="cov8" title="1">{
+
+                octal := strconv.FormatInt(int64(c), 8) // ASCII kodunu sekizli sayıya çeviriyoruz
+
+                for len(octal) &lt; 2 </span><span class="cov0" title="0">{ // Eğer sayının uzunluğu 2 basamak değilse başına sıfır ekliyoruz
+                        octal = "0" + octal
+                }</span>
+
+                <span class="cov8" title="1">output += octal + " "</span> // Sekizli çıktısını birleştiriyoruz
+        }
+
+        <span class="cov8" title="1">return output</span>
+}
+
+func BinaryToAscii(input string) string <span class="cov8" title="1">{ // Binary to ASCII
+
+        output := ""
+
+        var inputholder []byte
+
+        for i := 0; i &lt; len(input); i++ </span><span class="cov8" title="1">{
+
+                if string(input[i]) != " " </span><span class="cov8" title="1">{
+                        inputholder = append(inputholder, input[i])
+                }</span>
+        }
+
+        <span class="cov8" title="1">input = string(inputholder)
+
+        for i := 0; i &lt; len(input); i += 8 </span><span class="cov8" title="1">{ // Her 8 karakter için ASCII karakterlerini birleştiriyoruz
+
+                if i+8 &gt; len(input) </span><span class="cov0" title="0">{ // Eğer son 8 karakterin uzunluğu 8'den az ise başına sıfır ekliyoruz
+                        input += strings.Repeat("0", i+8-len(input))
+                }</span>
+
+                <span class="cov8" title="1">binary := input[i : i+8] // 8 bitlik ikili sayıyı ASCII karakterine dönüştürüyoruz
+                ascii, _ := strconv.ParseInt(binary, 2, 64)
+                output += string(rune(ascii)) + " "</span>
+        }
+
+        <span class="cov8" title="1">return output</span>
+}
+
+func BinaryToOctal(input string) string <span class="cov8" title="1">{ // Binary to Octal
+        output := ""
+
+        var inputholder []byte
+
+        for i := 0; i &lt; len(input); i++ </span><span class="cov8" title="1">{
+
+                if string(input[i]) != " " </span><span class="cov8" title="1">{
+                        inputholder = append(inputholder, input[i])
+                }</span>
+        }
+
+        <span class="cov8" title="1">input = string(inputholder)
+
+        for i := 0; i &lt; len(input); i += 8 </span><span class="cov8" title="1">{
+
+                if i+3 &gt; len(input) </span><span class="cov0" title="0">{
+                        input += strings.Repeat("0", i+8-len(input))
+                }</span>
+
+                <span class="cov8" title="1">binary := input[i : i+8]
+                octal, _ := strconv.ParseInt(binary, 2, 64)
+                output += strconv.FormatInt(octal, 8) + " "</span>
+
+        }
+
+        <span class="cov8" title="1">return output</span>
+}
+
+func OctalToAscii(input string) string <span class="cov8" title="1">{ // Octal to ASCII
+        output := ""
+
+        var inputholder []byte
+
+        for i := 0; i &lt; len(input); i++ </span><span class="cov8" title="1">{
+
+                if string(input[i]) != " " </span><span class="cov8" title="1">{
+                        inputholder = append(inputholder, input[i])
+                }</span>
+        }
+
+        <span class="cov8" title="1">input = string(inputholder)
+
+        for i := 0; i &lt; len(input); i += 3 </span><span class="cov8" title="1">{ // Her 3 karakter için ASCII karakterlerini birleştiriyoruz
+
+                if i+3 &gt; len(input) </span><span class="cov0" title="0">{ // Eğer son 3 karakterin uzunluğu 2'den az ise başına sıfır ekliyoruz
+                        input += strings.Repeat("0", i+3-len(input))
+                }</span>
+
+                <span class="cov8" title="1">octal := input[i : i+3] // 3 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
+                ascii, _ := strconv.ParseInt(octal, 8, 64)
+                output += string(rune(ascii)) + " "</span>
+        }
+
+        <span class="cov8" title="1">return output</span>
+}
+
+func OctalToBinary(input string) string <span class="cov8" title="1">{ // Octal to Binary
+        output := ""
+
+        var inputholder []byte
+
+        for i := 0; i &lt; len(input); i++ </span><span class="cov8" title="1">{
+
+                if string(input[i]) != " " </span><span class="cov8" title="1">{
+                        inputholder = append(inputholder, input[i])
+                }</span>
+        }
+
+        <span class="cov8" title="1">input = string(inputholder)
+
+        for i := 0; i &lt; len(input); i += 3 </span><span class="cov8" title="1">{ // Her 3 karakter için ASCII karakterlerini birleştiriyoruz
+
+                if i+3 &gt; len(input) </span><span class="cov0" title="0">{ // Eğer son 3 karakterin uzunluğu 2'den az ise başına sıfır ekliyoruz
+                        input += strings.Repeat("0", i+3-len(input))
+                }</span>
+
+                <span class="cov8" title="1">octal := input[i : i+3] // 3 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
+                ascii, _ := strconv.ParseInt(octal, 8, 64)
+                for _, c := range string(rune(ascii)) </span><span class="cov8" title="1">{
+
+                        binary := strconv.FormatInt(int64(c), 2) // ASCII kodunu ikili sayıya çeviriyoruz
+
+                        if len(binary) &lt; 8 </span><span class="cov8" title="1">{ // Eğer sayının uzunluğu 8 bit değilse başına sıfır ekliyoruz
+                                for i := len(binary); i &lt; 8; i++ </span><span class="cov8" title="1">{
+                                        binary = "0" + binary
+                                }</span>
+                        }
+
+                        <span class="cov8" title="1">output += binary + " "</span> // Binary çıktısını birleştiriyoruz
+                }
+        }
+
+        <span class="cov8" title="1">return output</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

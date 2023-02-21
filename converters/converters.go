@@ -151,7 +151,7 @@ func OctalToBinary(input string) string { // Octal to Binary
 
 		octal := input[i : i+3] // 3 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
 		ascii, _ := strconv.ParseInt(octal, 8, 64)
-		for _, c := range string(ascii) {
+		for _, c := range string(rune(ascii)) {
 
 			binary := strconv.FormatInt(int64(c), 2) // ASCII kodunu ikili sayıya çeviriyoruz
 
