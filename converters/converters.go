@@ -33,7 +33,7 @@ func AsciiToOctal(input string) string { // ASCII to Octal
 
 		octal := strconv.FormatInt(int64(c), 8) // ASCII kodunu sekizli sayıya çeviriyoruz
 
-		for len(octal) < 2 { // Eğer sayının uzunluğu 2 basamak değilse başına sıfır ekliyoruz
+		for len(octal) < 3 { // Eğer sayının uzunluğu 2 basamak değilse başına sıfır ekliyoruz
 			octal = "0" + octal
 		}
 
@@ -47,25 +47,24 @@ func BinaryToAscii(input string) string { // Binary to ASCII
 
 	output := ""
 
-	var inputholder []byte
-
-	for i := 0; i < len(input); i++ {
-
-		if string(input[i]) != " " {
-			inputholder = append(inputholder, input[i])
+	unwanted := " "
+	input = strings.Map(func(r rune) rune {
+		if strings.ContainsRune(unwanted, r) {
+			return -1
 		}
-	}
-
-	input = string(inputholder)
+		return r
+	}, input)
 
 	for i := 0; i < len(input); i += 8 { // Her 8 karakter için ASCII karakterlerini birleştiriyoruz
 
-		if i+8 > len(input) { // Eğer son 8 karakterin uzunluğu 8'den az ise başına sıfır ekliyoruz
-			input += strings.Repeat("0", i+8-len(input))
+		if i+8 > len(input) {
+			x := strings.Repeat("0", i+8-len(input))
+			input = x + input
 		}
 
-		binary := input[i : i+8] // 8 bitlik ikili sayıyı ASCII karakterine dönüştürüyoruz
-		ascii, _ := strconv.ParseInt(binary, 2, 64)
+		binary := input[i : i+8]                    // 8 bitlik ikili sayıyı ASCII karakterine dönüştürüyoruz ex.01010101
+		ascii, _ := strconv.ParseInt(binary, 2, 64) //(01010101=U)  U=85
+		//output = fmt.Sprintf("%v+%s", ascii, " ")
 		output += string(rune(ascii)) + " "
 	}
 
@@ -75,21 +74,19 @@ func BinaryToAscii(input string) string { // Binary to ASCII
 func BinaryToOctal(input string) string { // Binary to Octal
 	output := ""
 
-	var inputholder []byte
-
-	for i := 0; i < len(input); i++ {
-
-		if string(input[i]) != " " {
-			inputholder = append(inputholder, input[i])
+	unwanted := " "
+	input = strings.Map(func(r rune) rune {
+		if strings.ContainsRune(unwanted, r) {
+			return -1
 		}
-	}
-
-	input = string(inputholder)
+		return r
+	}, input)
 
 	for i := 0; i < len(input); i += 8 {
 
-		if i+3 > len(input) {
-			input += strings.Repeat("0", i+8-len(input))
+		if i+8 > len(input) {
+			x := strings.Repeat("0", i+8-len(input))
+			input = x + input
 		}
 
 		binary := input[i : i+8]
@@ -104,21 +101,19 @@ func BinaryToOctal(input string) string { // Binary to Octal
 func OctalToAscii(input string) string { // Octal to ASCII
 	output := ""
 
-	var inputholder []byte
-
-	for i := 0; i < len(input); i++ {
-
-		if string(input[i]) != " " {
-			inputholder = append(inputholder, input[i])
+	unwanted := " "
+	input = strings.Map(func(r rune) rune {
+		if strings.ContainsRune(unwanted, r) {
+			return -1
 		}
-	}
-
-	input = string(inputholder)
+		return r
+	}, input)
 
 	for i := 0; i < len(input); i += 3 { // Her 3 karakter için ASCII karakterlerini birleştiriyoruz
 
 		if i+3 > len(input) { // Eğer son 3 karakterin uzunluğu 2'den az ise başına sıfır ekliyoruz
-			input += strings.Repeat("0", i+3-len(input))
+			x := strings.Repeat("0", i+3-len(input))
+			input = x + input
 		}
 
 		octal := input[i : i+3] // 3 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
@@ -132,21 +127,19 @@ func OctalToAscii(input string) string { // Octal to ASCII
 func OctalToBinary(input string) string { // Octal to Binary
 	output := ""
 
-	var inputholder []byte
-
-	for i := 0; i < len(input); i++ {
-
-		if string(input[i]) != " " {
-			inputholder = append(inputholder, input[i])
+	unwanted := " "
+	input = strings.Map(func(r rune) rune {
+		if strings.ContainsRune(unwanted, r) {
+			return -1
 		}
-	}
-
-	input = string(inputholder)
+		return r
+	}, input)
 
 	for i := 0; i < len(input); i += 3 { // Her 3 karakter için ASCII karakterlerini birleştiriyoruz
 
 		if i+3 > len(input) { // Eğer son 3 karakterin uzunluğu 2'den az ise başına sıfır ekliyoruz
-			input += strings.Repeat("0", i+3-len(input))
+			x := strings.Repeat("0", i+3-len(input))
+			input = x + input
 		}
 
 		octal := input[i : i+3] // 3 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
