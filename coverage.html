@@ -55,7 +55,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">api/main.go (88.5%)</option>
+				<option value="file0">api/main.go (94.4%)</option>
 				
 				</select>
 			</div>
@@ -74,8 +74,6 @@
 import (
         "encoding/json"
         "log"
-        "strconv"
-        "strings"
 
         "github.com/gofiber/fiber/v2"
         "github.com/gofiber/fiber/v2/middleware/cors"
@@ -129,7 +127,7 @@ func Setup() *fiber.App <span class="cov8" title="1">{
 
                 }</span> else<span class="cov8" title="1"> if reqBody.SourceType == "ascii" &amp;&amp; reqBody.DestType == "octal" </span><span class="cov8" title="1">{
                         asciiInput := reqBody.Value
-                        octalResult := AsciiToOctal(asciiInput)
+                        octalResult := converters.AsciiToOctal(asciiInput)
 
                         result := Result{Output: octalResult}
                         jsonResult, _ := json.Marshal(result)
@@ -140,7 +138,7 @@ func Setup() *fiber.App <span class="cov8" title="1">{
 
                 }</span> else<span class="cov8" title="1"> if reqBody.SourceType == "binary" &amp;&amp; reqBody.DestType == "ascii" </span><span class="cov8" title="1">{
                         binaryInput := reqBody.Value
-                        asciiResult := BinaryToAscii(binaryInput)
+                        asciiResult := converters.BinaryToAscii(binaryInput)
 
                         result := Result{Output: asciiResult}
                         jsonResult, _ := json.Marshal(result)
@@ -151,7 +149,7 @@ func Setup() *fiber.App <span class="cov8" title="1">{
 
                 }</span> else<span class="cov8" title="1"> if reqBody.SourceType == "binary" &amp;&amp; reqBody.DestType == "octal" </span><span class="cov8" title="1">{
                         binaryInput := reqBody.Value
-                        octalResult := BinaryToOctal(binaryInput)
+                        octalResult := converters.BinaryToOctal(binaryInput)
 
                         result := Result{Output: octalResult}
                         jsonResult, _ := json.Marshal(result)
@@ -162,7 +160,7 @@ func Setup() *fiber.App <span class="cov8" title="1">{
 
                 }</span> else<span class="cov8" title="1"> if reqBody.SourceType == "octal" &amp;&amp; reqBody.DestType == "ascii" </span><span class="cov8" title="1">{
                         octalInput := reqBody.Value
-                        asciiResult := OctalToAscii(octalInput)
+                        asciiResult := converters.OctalToAscii(octalInput)
 
                         result := Result{Output: asciiResult}
                         jsonResult, _ := json.Marshal(result)
@@ -173,7 +171,7 @@ func Setup() *fiber.App <span class="cov8" title="1">{
 
                 }</span> else<span class="cov8" title="1"> if reqBody.SourceType == "octal" &amp;&amp; reqBody.DestType == "binary" </span><span class="cov8" title="1">{
                         octalInput := reqBody.Value
-                        binaryResult := OctalToBinary(octalInput)
+                        binaryResult := converters.OctalToBinary(octalInput)
 
                         result := Result{Output: binaryResult}
                         jsonResult, _ := json.Marshal(result)
@@ -187,162 +185,6 @@ func Setup() *fiber.App <span class="cov8" title="1">{
                 <span class="cov8" title="1">return nil</span>
         })
         <span class="cov8" title="1">return app</span>
-}
-
-func AsciiToBinary(input string) string <span class="cov0" title="0">{ // ASCII to Binary
-
-        output := ""
-
-        for _, c := range input </span><span class="cov0" title="0">{
-
-                binary := strconv.FormatInt(int64(c), 2) // ASCII kodunu ikili sayıya çeviriyoruz
-
-                if len(binary) &lt; 8 </span><span class="cov0" title="0">{ // Eğer sayının uzunluğu 8 bit değilse başına sıfır ekliyoruz
-                        for i := len(binary); i &lt; 8; i++ </span><span class="cov0" title="0">{
-                                binary = "0" + binary
-                        }</span>
-                }
-
-                <span class="cov0" title="0">output += binary + " "</span> // Binary çıktısını birleştiriyoruz
-        }
-
-        <span class="cov0" title="0">return output</span>
-}
-
-func AsciiToOctal(input string) string <span class="cov8" title="1">{ // ASCII to Octal
-
-        output := ""
-
-        for _, c := range input </span><span class="cov8" title="1">{
-
-                octal := strconv.FormatInt(int64(c), 8) // ASCII kodunu sekizli sayıya çeviriyoruz
-
-                for len(octal) &lt; 3 </span><span class="cov8" title="1">{ // Eğer sayının uzunluğu 2 basamak değilse başına sıfır ekliyoruz
-                        octal = "0" + octal
-                }</span>
-
-                <span class="cov8" title="1">output += octal + " "</span> // Sekizli çıktısını birleştiriyoruz
-        }
-
-        <span class="cov8" title="1">return output</span>
-}
-
-func BinaryToAscii(input string) string <span class="cov8" title="1">{ // Binary to ASCII
-
-        output := ""
-
-        unwanted := " "
-        input = strings.Map(func(r rune) rune </span><span class="cov8" title="1">{
-                if strings.ContainsRune(unwanted, r) </span><span class="cov0" title="0">{
-                        return -1
-                }</span>
-                <span class="cov8" title="1">return r</span>
-        }, input)
-
-        <span class="cov8" title="1">for i := 0; i &lt; len(input); i += 8 </span><span class="cov8" title="1">{ // Her 8 karakter için ASCII karakterlerini birleştiriyoruz
-
-                if i+8 &gt; len(input) </span><span class="cov8" title="1">{
-                        x := strings.Repeat("0", i+8-len(input))
-                        input = x + input
-                }</span>
-
-                <span class="cov8" title="1">binary := input[i : i+8]                    // 8 bitlik ikili sayıyı ASCII karakterine dönüştürüyoruz ex.01010101
-                ascii, _ := strconv.ParseInt(binary, 2, 64) //(01010101=U)  U=85
-                //output = fmt.Sprintf("%v+%s", ascii, " ")
-                output += string(rune(ascii)) + " "</span>
-        }
-
-        <span class="cov8" title="1">return output</span>
-}
-
-func BinaryToOctal(input string) string <span class="cov8" title="1">{ // Binary to Octal
-        output := ""
-
-        unwanted := " "
-        input = strings.Map(func(r rune) rune </span><span class="cov8" title="1">{
-                if strings.ContainsRune(unwanted, r) </span><span class="cov0" title="0">{
-                        return -1
-                }</span>
-                <span class="cov8" title="1">return r</span>
-        }, input)
-
-        <span class="cov8" title="1">for i := 0; i &lt; len(input); i += 8 </span><span class="cov8" title="1">{
-
-                if i+8 &gt; len(input) </span><span class="cov8" title="1">{
-                        x := strings.Repeat("0", i+8-len(input))
-                        input = x + input
-                }</span>
-
-                <span class="cov8" title="1">binary := input[i : i+8]
-                octal, _ := strconv.ParseInt(binary, 2, 64)
-                output += strconv.FormatInt(octal, 8) + " "</span>
-
-        }
-
-        <span class="cov8" title="1">return output</span>
-}
-
-func OctalToAscii(input string) string <span class="cov8" title="1">{ // Octal to ASCII
-        output := ""
-
-        unwanted := " "
-        input = strings.Map(func(r rune) rune </span><span class="cov8" title="1">{
-                if strings.ContainsRune(unwanted, r) </span><span class="cov0" title="0">{
-                        return -1
-                }</span>
-                <span class="cov8" title="1">return r</span>
-        }, input)
-
-        <span class="cov8" title="1">for i := 0; i &lt; len(input); i += 3 </span><span class="cov8" title="1">{ // Her 3 karakter için ASCII karakterlerini birleştiriyoruz
-
-                if i+3 &gt; len(input) </span><span class="cov8" title="1">{ // Eğer son 3 karakterin uzunluğu 2'den az ise başına sıfır ekliyoruz
-                        x := strings.Repeat("0", i+3-len(input))
-                        input = x + input
-                }</span>
-
-                <span class="cov8" title="1">octal := input[i : i+3] // 3 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
-                ascii, _ := strconv.ParseInt(octal, 8, 64)
-                output += string(rune(ascii)) + " "</span>
-        }
-
-        <span class="cov8" title="1">return output</span>
-}
-
-func OctalToBinary(input string) string <span class="cov8" title="1">{ // Octal to Binary
-        output := ""
-
-        unwanted := " "
-        input = strings.Map(func(r rune) rune </span><span class="cov8" title="1">{
-                if strings.ContainsRune(unwanted, r) </span><span class="cov0" title="0">{
-                        return -1
-                }</span>
-                <span class="cov8" title="1">return r</span>
-        }, input)
-
-        <span class="cov8" title="1">for i := 0; i &lt; len(input); i += 3 </span><span class="cov8" title="1">{ // Her 3 karakter için ASCII karakterlerini birleştiriyoruz
-
-                if i+3 &gt; len(input) </span><span class="cov8" title="1">{ // Eğer son 3 karakterin uzunluğu 2'den az ise başına sıfır ekliyoruz
-                        x := strings.Repeat("0", i+3-len(input))
-                        input = x + input
-                }</span>
-
-                <span class="cov8" title="1">octal := input[i : i+3] // 3 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
-                ascii, _ := strconv.ParseInt(octal, 8, 64)
-                for _, c := range string(rune(ascii)) </span><span class="cov8" title="1">{
-
-                        binary := strconv.FormatInt(int64(c), 2) // ASCII kodunu ikili sayıya çeviriyoruz
-
-                        if len(binary) &lt; 8 </span><span class="cov8" title="1">{ // Eğer sayının uzunluğu 8 bit değilse başına sıfır ekliyoruz
-                                for i := len(binary); i &lt; 8; i++ </span><span class="cov8" title="1">{
-                                        binary = "0" + binary
-                                }</span>
-                        }
-
-                        <span class="cov8" title="1">output += binary + " "</span> // Binary çıktısını birleştiriyoruz
-                }
-        }
-
-        <span class="cov8" title="1">return output</span>
 }
 </pre>
 		
