@@ -24,10 +24,6 @@ func Setup() *fiber.App {
 
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("OK")
-	})
-
 	app.Use(cors.New())
 
 	app.Post("/convert", func(c *fiber.Ctx) error {
