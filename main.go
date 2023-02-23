@@ -14,7 +14,19 @@ import (
 
 func main() {
 
+	app := Setup()
+
+	log.Fatal(app.Listen(":6027"))
+
+}
+
+func Setup() *fiber.App {
+
 	app := fiber.New()
+
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("OK")
+	})
 
 	app.Use(cors.New())
 
@@ -107,9 +119,7 @@ func main() {
 
 		return nil
 	})
-
-	log.Fatal(app.Listen(":6027"))
-
+	return app
 }
 
 func AsciiToBinary(input string) string { // ASCII to Binary
