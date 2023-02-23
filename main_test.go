@@ -13,7 +13,7 @@ func TestConvertEndpoint(t *testing.T) {
 	app := Setup()
 	defer app.Shutdown()
 
-	// ASCİİTOBİNARY
+	///////////////////////////////////////////////// ASCİİTOBİNARY
 	// Create a test request
 	req := httptest.NewRequest("POST", "/convert", bytes.NewBuffer([]byte(`{
         "value": "dilara",
@@ -43,10 +43,10 @@ func TestConvertEndpoint(t *testing.T) {
 		t.Errorf("Expected response body '%s' but got '%s'", expected, string(body))
 	}
 
-	//ASCİİTOOCTAL
+	//////////////////////////////////////////////////ASCİİTOOCTAL
 	// Create a test request
 	req = httptest.NewRequest("POST", "/convert", bytes.NewBuffer([]byte(`{
-        "value": "dilara",
+        "value": "dilara0",
         "sourceType": "ascii",
         "destType": "octal"
     }`)))
@@ -64,7 +64,7 @@ func TestConvertEndpoint(t *testing.T) {
 	}
 
 	// Check the response body
-	expected = `{"message":"144 151 154 141 162 141 "}`
+	expected = `{"message":"144 151 154 141 162 141 060 "}`
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
@@ -73,10 +73,10 @@ func TestConvertEndpoint(t *testing.T) {
 		t.Errorf("Expected response body '%s' but got '%s'", expected, string(body))
 	}
 
-	//BİNARYTOASCİİ
+	/////////////////////////////////////////////////////////BİNARYTOASCİİ
 	// Create a test request
 	req = httptest.NewRequest("POST", "/convert", bytes.NewBuffer([]byte(`{
-        "value": "01100100 01101001 01101100 01100001 01110010 01100001",
+        "value": "1010101",
         "sourceType": "binary",
         "destType": "ascii"
     }`)))
@@ -94,7 +94,7 @@ func TestConvertEndpoint(t *testing.T) {
 	}
 
 	// Check the response body
-	expected = `{"message":"d i l a r a "}`
+	expected = `{"message":"U "}`
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
@@ -103,10 +103,10 @@ func TestConvertEndpoint(t *testing.T) {
 		t.Errorf("Expected response body '%s' but got '%s'", expected, string(body))
 	}
 
-	//BİNARYTOOCTAL
+	///////////////////////////////////////////////////////BİNARYTOOCTAL
 	// Create a test request
 	req = httptest.NewRequest("POST", "/convert", bytes.NewBuffer([]byte(`{
-        "value": "01100100 01101001 01101100 01100001 01110010 01100001",
+        "value": "1010101",
         "sourceType": "binary",
         "destType": "octal"
     }`)))
@@ -124,7 +124,7 @@ func TestConvertEndpoint(t *testing.T) {
 	}
 
 	// Check the response body
-	expected = `{"message":"144 151 154 141 162 141 "}`
+	expected = `{"message":"125 "}`
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
@@ -133,10 +133,10 @@ func TestConvertEndpoint(t *testing.T) {
 		t.Errorf("Expected response body '%s' but got '%s'", expected, string(body))
 	}
 
-	//OCTALTOASCİİ
+	///////////////////////////////////////////////////////////////////////OCTALTOASCİİ
 	// Create a test request
 	req = httptest.NewRequest("POST", "/convert", bytes.NewBuffer([]byte(`{
-        "value": "144 151 154 141 162 141",
+        "value": "60",
         "sourceType": "octal",
         "destType": "ascii"
     }`)))
@@ -154,7 +154,7 @@ func TestConvertEndpoint(t *testing.T) {
 	}
 
 	// Check the response body
-	expected = `{"message":"d i l a r a "}`
+	expected = `{"message":"0 "}`
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
@@ -163,10 +163,9 @@ func TestConvertEndpoint(t *testing.T) {
 		t.Errorf("Expected response body '%s' but got '%s'", expected, string(body))
 	}
 
-	//OCTALTOBİNARY
-
+	/////////////////////////////////////////////////////////////OCTALTOBİNARY
 	req = httptest.NewRequest("POST", "/convert", bytes.NewBuffer([]byte(`{
-        "value": "144 151 154 141 162 141",
+        "value": "60",
         "sourceType": "octal",
         "destType": "binary"
     }`)))
@@ -184,7 +183,7 @@ func TestConvertEndpoint(t *testing.T) {
 	}
 
 	// Check the response body
-	expected = `{"message":"01100100 01101001 01101100 01100001 01110010 01100001 "}`
+	expected = `{"message":"00110000 "}`
 	body, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
@@ -192,4 +191,5 @@ func TestConvertEndpoint(t *testing.T) {
 	if string(body) != expected {
 		t.Errorf("Expected response body '%s' but got '%s'", expected, string(body))
 	}
+
 }
