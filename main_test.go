@@ -2,15 +2,17 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 )
 
 func TestConvertEndpoint(t *testing.T) {
-	// Create a new fiber app
-	app := Setup()
+
+	app := Setup() // Create a new fiber app
 	defer app.Shutdown()
 
 	///////////////////////////////////////////////// ASCİİTOBİNARY
@@ -192,4 +194,57 @@ func TestConvertEndpoint(t *testing.T) {
 		t.Errorf("Expected response body '%s' but got '%s'", expected, string(body))
 	}
 
+	req = httptest.NewRequest("POST", "/convert", bytes.NewBuffer([]byte(`{
+        "value": "error",
+        "sourceType": "ascii",
+        "destType": "octal"
+    }`)))
+	req.Header.Set("Content-Type", "falsecontenttype")
+
+	// Perform the request
+	resp, err = app.Test(req, -1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Check the response status code
+	if resp.StatusCode != http.StatusBadRequest {
+		t.Errorf("Expected status code %d but got %d", http.StatusOK, resp.StatusCode)
+	}
+
+	// Check the response body
+	expected = `{"error":"Bad Request"}`
+	body, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(body) != expected {
+		t.Errorf("Expected response body '%s' but got '%s'", expected, string(body))
+	}
+}
+
+func TestMain(t *testing.T) {
+	// HTTP sunucusu oluşturma
+	go main()
+
+	// Dinlenmeye hazır olana kadar bekleme
+	time.Sleep(1 * time.Second)
+
+	reqBody, _ := json.Marshal(map[string]string{
+		"value":      "test",
+		"sourceType": "ascii",
+		"destType":   "binary",
+	})
+
+	// Sunucuya bir GET isteği gönderme
+	resp, err := http.Post("http://localhost:6027/convert", "application/json", bytes.NewBuffer(reqBody))
+	if err != nil {
+		t.Errorf("HTTP isteği gönderirken hata oluştu: %v", err)
+	}
+	defer resp.Body.Close()
+
+	// Cevabın 200 OK kodu döndürdüğünü doğrulama
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("Beklenmeyen HTTP durumu kodu: %v", resp.StatusCode)
+	}
 }
