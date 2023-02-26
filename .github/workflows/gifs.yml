@@ -1,4 +1,4 @@
-name: Cats 😺
+name: Dogs 🐕
 
 on:
   pull_request_target:
@@ -8,9 +8,10 @@ on:
 
 jobs:
   aCatForCreatingThePullRequest:
-    name: A cat for your effort!
+    name: A dog for your effort!
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
-      - uses: ruairidhwm/action-cats@1.0.1
+      - uses: stanleynguyen/action-dogs@v1
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
