@@ -28,13 +28,3 @@ jobs:
       with:
         name: Test results
         path: ~/test-results/junit/
-
-  store-artifacts:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-    - name: Archive test artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: Test artifacts
-        path: ~/test-results/junit/
