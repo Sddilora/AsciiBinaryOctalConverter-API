@@ -2,7 +2,7 @@ name: Create Release
 
 on:
   push:
-    branches: [ConverterAscii]
+    branches: [Converter]
 
 jobs:
   build:
