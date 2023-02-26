@@ -1,0 +1,89 @@
+# name: Go API Test (Converter)
+
+# on:
+#   push:
+#     branches: [ "ConverterAscii" ]
+#   pull_request:
+#     branches: [ "ConverterAscii" ]
+
+# jobs:
+#   test:
+#     name: Go API Test (Converter)
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v2
+
+#     - name: Set up Go
+#       uses: actions/setup-go@v2
+#       with:
+#         go-version: 1.19
+
+#     - name: Install dependencies
+#       run: go mod download
+
+#     - name: Test
+#       run: go test -v ./...
+
+name: Test
+
+on:
+  push:
+    branches: [ ConverterAscii ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: go mod download
+
+    - name: Run tests
+      run: go test -v ./...
+
+    - name: Save test results
+      if: always()
+      run: |
+        mkdir -p test-results
+        go test -v ./... | go-junit-report > test-results/results.xml
+
+    - name: Publish test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: test-results
+        path: test-results
+
+    - name: Deploy test results
+      uses: JamesIves/github-pages-deploy-action@4.1.2
+      with:
+        branch: gh-pages
+        folder: test-results
+        clean: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+- # .github/workflows/ramsey_gifs.yml
+name: Ramsey GIFifier
+
+on:
+  # Run this workflow only when a new pull request is opened
+  # compare: https://git.io/JvTyV
+  pull_request:
+    types: [opened]
+
+jobs:
+  ramsey-gififier:
+    name: Ramsey GIFifier
+    runs-on: ubuntu-latest
+    steps:
+    - name: Ramsey GIFifier
+      uses: ethan-dowler/ramsey-gififier@master
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

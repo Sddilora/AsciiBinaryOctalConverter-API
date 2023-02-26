@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../.git"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "AsciiBinaryOctalConverter"
+	}
+}
