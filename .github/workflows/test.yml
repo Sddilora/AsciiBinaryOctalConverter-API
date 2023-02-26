@@ -18,14 +18,15 @@ jobs:
     - name: Run tests
       run: go test -v ./...
 
-
     - name: Save test results
       run: |
         mkdir -p testResults/
-        find . -type f -name "TEST*test.go" -exec cp {} testResults/ \;
+        find . -type f -name "TEST*.xml" -exec cp {} testResults/ \;
 
     - name: Upload test results
       uses: actions/upload-artifact@v2
       with:
         name: Test results
         path: testResults/
+
+        
