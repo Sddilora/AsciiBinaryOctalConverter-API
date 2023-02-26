@@ -18,19 +18,24 @@ jobs:
     - name: Run tests
       run: go test -v ./...
 
-    - name: Save test results
-      if: always()
-      run: |
-        mkdir -p test-results
-        go test -v ./... | go-junit-report > test-results/results.xml
-
+    - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/junit
+          
     - name: Publish test results
       uses: actions/upload-artifact@v2
       with:
         name: test-results
         path: test-results
 
-    - name: Deploy test results
+    - name: Deploy test result
       uses: JamesIves/github-pages-deploy-action@4.1.2
       with:
         branch: gh-pages
