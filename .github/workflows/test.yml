@@ -16,10 +16,7 @@ jobs:
       run: go mod download
 
     - name: Test with Go
-      run: go test -json > TestResults-1.19.json
-    
-    - name: Upload Go test results
-      uses: actions/upload-artifact@v3
-      with:
-        name: Go-results-1.19
-        path: TestResults-1.19.json
+      run: go test -coverprofile=coverage.out
+      
+    - name: Produce coverage report
+      run: go tool cover -html=coverage.out -o testResults/coverage.html
