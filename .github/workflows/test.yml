@@ -22,7 +22,7 @@ jobs:
     - name: Save test results
       run: |
         mkdir -p testResults/
-        find . -type f -name "TEST*.xml" -exec cp {} testResults/ \;
+        find . -type f -name "TEST*.go" -exec cp {} testResults/ \;
 
     - name: Upload test results
       uses: actions/upload-artifact@v2
