@@ -2,7 +2,7 @@ name: Test
 
 on:
   push:
-    branches: [ ConverterAscii ]
+    branches: [ConverterAscii]
 
 jobs:
   test:
@@ -17,14 +17,24 @@ jobs:
 
     - name: Run tests
       run: go test -v ./...
-      
+
     - name: Save test results
-    command: |
-      mkdir -p ~/test-results/junit/
-      find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-    when: always
-- store_test_results:
-    path: ~/test-results
-- store_artifacts:
-    path: ~/test-results/junit
-    
+      run: |
+        mkdir -p ~/test-results/junit/
+        find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test results
+        path: ~/test-results/junit/
+
+  store-artifacts:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Archive test artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test artifacts
+        path: ~/test-results/junit/
