@@ -16,7 +16,7 @@ jobs:
       with:
         go-version: '1.16'
     - name: Build
-      run: go build -o myapp.exe
+      run: go build -o apiapp.exe
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       with:
