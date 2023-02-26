@@ -1,31 +1,3 @@
-# name: Go API Test (Converter)
-
-# on:
-#   push:
-#     branches: [ "ConverterAscii" ]
-#   pull_request:
-#     branches: [ "ConverterAscii" ]
-
-# jobs:
-#   test:
-#     name: Go API Test (Converter)
-#     runs-on: ubuntu-latest
-
-#     steps:
-#     - name: Checkout
-#       uses: actions/checkout@v2
-
-#     - name: Set up Go
-#       uses: actions/setup-go@v2
-#       with:
-#         go-version: 1.19
-
-#     - name: Install dependencies
-#       run: go mod download
-
-#     - name: Test
-#       run: go test -v ./...
-
 name: Test
 
 on:
@@ -86,4 +58,32 @@ jobs:
       uses: ethan-dowler/ramsey-gififier@master
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# name: Go API Test (Converter)
+
+# on:
+#   push:
+#     branches: [ "ConverterAscii" ]
+#   pull_request:
+#     branches: [ "ConverterAscii" ]
+
+# jobs:
+#   test:
+#     name: Go API Test (Converter)
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v2
+
+#     - name: Set up Go
+#       uses: actions/setup-go@v2
+#       with:
+#         go-version: 1.19
+
+#     - name: Install dependencies
+#       run: go mod download
+
+#     - name: Test
+#       run: go test -v ./...
 
