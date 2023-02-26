@@ -17,7 +17,6 @@ jobs:
 
     - name: Run tests
       run: go test -v ./...
-
     - run:
           name: Save test results
           command: |
@@ -28,7 +27,7 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
-          
+
     - name: Publish test results
       uses: actions/upload-artifact@v2
       with:
