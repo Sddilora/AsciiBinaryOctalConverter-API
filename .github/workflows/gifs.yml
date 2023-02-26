@@ -1,13 +1,16 @@
-name: 'Action Cats'
-description: 'Posts a cat gif on every PR as a reward for pushing code.'
-author: 'Ruairidh Wynne-McHardy'
-branding:
-  icon: 'code'  
-  color: 'blue'
-inputs:
-  GITHUB_TOKEN:        #Github token      
-    description: 'Github token for the repository.'
-    required: true
-runs:
-  using: 'node12'
-  main: 'dist/index.js'
+name: Cats 😺
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+
+jobs:
+  aCatForCreatingThePullRequest:
+    name: A cat for your effort!
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ruairidhwm/action-cats@1.0.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
