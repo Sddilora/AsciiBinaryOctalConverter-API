@@ -20,26 +20,12 @@ jobs:
 
 
     - name: Save test results
-    command: |
-      mkdir -p ~/test-results/junit/
-      find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-    when: always
-      - store_test_results:
-          path: ~/test-results
-      - store_artifacts:
-          path: ~/test-results/junit
+      run: |
+        mkdir -p testResults/
+        find . -type f -name "TEST*.xml" -exec cp {} testResults/ \;
 
-    - name: Publish test results
-    uses: actions/upload-artifact@v2
-    with:
-      name: test-results
-      path: test-results
-
-    - name: Deploy test result
-    uses: JamesIves/github-pages-deploy-action@4.1.2
-    with:
-      branch: gh-pages
-      folder: test-results
-      clean: true
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Upload test results
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test results
+        path: testResults/
