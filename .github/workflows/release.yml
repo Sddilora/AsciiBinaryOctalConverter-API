@@ -20,7 +20,7 @@ jobs:
           python-version: '3.x'
       - name: Generate unique tag
         id: gen_tag
-        run: echo ::set-output name=tag::$(date +'%Y%m%d%H%M%S')
+        run: echo ::set-output name=tag::$(date +'%d-%H:%M:%S')
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -29,10 +29,6 @@ jobs:
         with:
           tag_name: ${{ steps.gen_tag.outputs.tag }}
           release_name: Release ${{ steps.gen_tag.outputs.tag }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
           draft: false
           prerelease: false
       - name: Upload Release Asset
