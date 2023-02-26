@@ -15,17 +15,11 @@ jobs:
     - name: Install dependencies
       run: go mod download
 
-    - name: Run tests
-      run: go test -v ./...
-
-
-    - name: Save test results
-      run: |
-        mkdir -p testResults/
-        find . -type f -name "TEST*test.go" -exec cp {} testResults/ \;
-
-    - name: Upload test results
-      uses: actions/upload-artifact@v2
+    - name: Test with Go
+      run: go test -json > TestResults-1.19.json
+    
+    - name: Upload Go test results
+      uses: actions/upload-artifact@v3
       with:
-        name: Test results
-        path: testResults/
+        name: Go-results-1.19
+        path: TestResults-1.19.json
