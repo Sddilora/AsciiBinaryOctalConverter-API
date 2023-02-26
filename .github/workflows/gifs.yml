@@ -1,15 +1,13 @@
-name: Ramsey GIFifier
-
-on:
-  pull_request:
-    types: [opened]
-
-jobs:
-  ramsey-gififier:
-    name: Ramsey GIFifier
-    runs-on: ubuntu-latest
-    steps:
-    - name: Ramsey GIFifier
-      uses: ethan-dowler/ramsey-gififier@master
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+name: 'Action Cats'
+description: 'Posts a cat gif on every PR as a reward for pushing code.'
+author: 'Ruairidh Wynne-McHardy'
+branding:
+  icon: 'code'  
+  color: 'blue'
+inputs:
+  GITHUB_TOKEN:        #Github token      
+    description: 'Github token for the repository.'
+    required: true
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
