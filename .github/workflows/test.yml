@@ -2,7 +2,7 @@ name: Test
 
 on:
   push:
-    branches: [ConverterAscii]
+    branches: [Converter]
 
 jobs:
   test:
