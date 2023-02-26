@@ -17,6 +17,26 @@ jobs:
 
     - name: Run tests
       run: go test -v ./...
+
+# .github/workflows/ramsey_gifs.yml
+name: Ramsey GIFifier
+
+on:
+  # Run this workflow only when a new pull request is opened
+  # compare: https://git.io/JvTyV
+  pull_request:
+    types: [opened]
+
+jobs:
+  ramsey-gififier:
+    name: Ramsey GIFifier
+    runs-on: ubuntu-latest
+    steps:
+    - name: Ramsey GIFifier
+      uses: ethan-dowler/ramsey-gififier@master
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     # - run:
     #       name: Save test results
     #       command: |
