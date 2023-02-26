@@ -19,4 +19,10 @@ jobs:
       run: go test -coverprofile=coverage.out
       
     - name: Produce coverage report
-      run: go tool cover -html=coverage.out -o testResults/coverage.html
+      run: go tool cover -html=coverage.out -o coverage.html
+      
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v3
+      with:
+        name: code-coverage-report
+        path: testResults/code-coverage.html
