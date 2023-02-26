@@ -1,0 +1,27 @@
+name: Build and Release Go App
+
+on:
+  push:
+    branches: [ConverterAscii]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.16'
+    - name: Build
+      run: go build -o myapp.exe
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      with:
+        asset_path: ./apiapp.exe
+        asset_name: apiapp.exe
+        asset_content_type: application/octet-stream
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
