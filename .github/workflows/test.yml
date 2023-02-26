@@ -15,18 +15,14 @@ jobs:
     - name: Install dependencies
       run: go mod download
 
-    - name: Run tests
-      run: go test -v ./...
-
-    - name: Save test results
-      run: |
-        mkdir -p testResults/
-        find . -type f -name "TEST*.xml" -exec cp {} testResults/ \;
-
-    - name: Upload test results
-      uses: actions/upload-artifact@v2
+    - name: Test with Go
+      run: go test -coverprofile=coverage.out
+      
+    - name: Produce coverage report
+      run: go tool cover -html=coverage.out -o coverage.html
+      
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v3
       with:
-        name: Test results
-        path: testResults/
-
-        
+        name: code-coverage-report
+        path: coverage.html
