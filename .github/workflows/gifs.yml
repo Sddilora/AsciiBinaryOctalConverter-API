@@ -11,7 +11,7 @@ jobs:
     name: A cat for your effort!
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      issues: write-all
     steps:
       - uses: ruairidhwm/action-cats@1.0.1
         with:
