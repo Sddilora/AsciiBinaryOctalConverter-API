@@ -9,9 +9,9 @@ func AsciiToBinary(input string) string { // ASCII to Binary
 
 	output := ""
 
-	for _, c := range input {
+	for i := 0; i < len([]rune(input)); i++ {
 
-		binary := strconv.FormatInt(int64(c), 2) // ASCII kodunu ikili sayıya çeviriyoruz
+		binary := strconv.FormatInt(int64(input[i]), 2) // ASCII kodunu ikili sayıya çeviriyoruz
 
 		if len(binary) < 8 { // Eğer sayının uzunluğu 8 bit değilse başına sıfır ekliyoruz
 			for i := len(binary); i < 8; i++ {
@@ -19,7 +19,11 @@ func AsciiToBinary(input string) string { // ASCII to Binary
 			}
 		}
 
-		output += binary + " " // Binary çıktısını birleştiriyoruz
+		if i < len([]rune(input))-1 {
+			output += binary + " "
+		} else {
+			output += binary
+		}
 	}
 
 	return output
@@ -29,15 +33,19 @@ func AsciiToOctal(input string) string { // ASCII to Octal
 
 	output := ""
 
-	for _, c := range input {
+	for i := 0; i < len([]rune(input)); i++ {
 
-		octal := strconv.FormatInt(int64(c), 8) // ASCII kodunu sekizli sayıya çeviriyoruz
+		octal := strconv.FormatInt(int64(input[i]), 8) // ASCII kodunu sekizli sayıya çeviriyoruz
 
 		for len(octal) < 3 { // Eğer sayının uzunluğu 2 basamak değilse başına sıfır ekliyoruz
 			octal = "0" + octal
 		}
 
-		output += octal + " " // Sekizli çıktısını birleştiriyoruz
+		if i < len([]rune(input))-1 {
+			output += octal + " "
+		} else {
+			output += octal
+		}
 	}
 
 	return output
@@ -62,10 +70,15 @@ func BinaryToAscii(input string) string { // Binary to ASCII
 			input = x + input
 		}
 
-		binary := input[i : i+8]                    // 8 bitlik ikili sayıyı ASCII karakterine dönüştürüyoruz ex.01010101
-		ascii, _ := strconv.ParseInt(binary, 2, 64) //(01010101=U)  U=85
-		//output = fmt.Sprintf("%v+%s", ascii, " ")
-		output += string(rune(ascii)) + " "
+		binary := input[i : i+8]                    // 8 bitlik ikili sayıyı ASCII karakterine dönüştürüyoruz ex.U -> 01010101
+		ascii, _ := strconv.ParseInt(binary, 2, 64) //(01010101=U)  (U=85 in 10)
+
+		if i+8 == (len([]rune(input))) {
+			output += string(rune(ascii))
+		} else {
+			output += string(rune(ascii)) + " "
+		}
+
 	}
 
 	return output
@@ -91,7 +104,12 @@ func BinaryToOctal(input string) string { // Binary to Octal
 
 		binary := input[i : i+8]
 		octal, _ := strconv.ParseInt(binary, 2, 64)
-		output += strconv.FormatInt(octal, 8) + " "
+
+		if i+8 == (len([]rune(input))) {
+			output += strconv.FormatInt(octal, 8)
+		} else {
+			output += strconv.FormatInt(octal, 8) + " "
+		}
 
 	}
 
@@ -118,7 +136,13 @@ func OctalToAscii(input string) string { // Octal to ASCII
 
 		octal := input[i : i+3] // 3 basamaklı sekizli sayıyı ASCII karakterine dönüştürüyoruz
 		ascii, _ := strconv.ParseInt(octal, 8, 64)
-		output += string(rune(ascii)) + " "
+
+		if i+3 == (len([]rune(input))) {
+			output += string(rune(ascii))
+		} else {
+			output += string(rune(ascii)) + " "
+		}
+
 	}
 
 	return output
@@ -154,7 +178,12 @@ func OctalToBinary(input string) string { // Octal to Binary
 				}
 			}
 
-			output += binary + " " // Binary çıktısını birleştiriyoruz
+			if i+3 == (len([]rune(input))) {
+				output += binary // Binary çıktısını birleştiriyoruz
+			} else {
+				output += binary + " " // Binary çıktısını birleştiriyoruz
+			}
+
 		}
 	}
 

@@ -18,10 +18,6 @@ func main() {
 
 }
 
-// func ConvertEndpoint(w http.ResponseWriter, r *http.Request) {
-// 	// Endpoint işlemleri burada gerçekleştirilir
-// }
-
 func Setup() *fiber.App {
 
 	app := fiber.New()
