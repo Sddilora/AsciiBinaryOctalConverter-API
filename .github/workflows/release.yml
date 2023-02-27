@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build
-        run: GOOS=linux GOARCH=amd64 go build -o bin/app-amd64-linux main.go
+        run: go build -o api
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -37,6 +37,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./main.go
+          asset_path: ./api
           asset_name: api.exe
           asset_content_type: application/octet-stream
