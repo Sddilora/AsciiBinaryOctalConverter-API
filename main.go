@@ -50,9 +50,9 @@ func Setup() *fiber.App {
 			result := Result{Output: binaryResult}
 			jsonResult, _ := json.Marshal(result)
 
-			c.Type("application/json")
+			c.Type("application/json") // Type sets the Content-Type HTTP header to the MIME type specified by the file extension.
 
-			c.Send(jsonResult)
+			c.Send(jsonResult) //Send sets the HTTP response body without copying it
 
 		} else if reqBody.SourceType == "ascii" && reqBody.DestType == "octal" {
 			asciiInput := reqBody.Value
