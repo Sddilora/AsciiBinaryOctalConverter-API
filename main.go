@@ -14,8 +14,7 @@ func main() {
 
 	app := Setup()
 
-	log.Fatal(app.Listen(":6027"))
-
+	log.Fatal(app.Listen("127.0.0.1:3000")) // I changed this part to try to ping in my ServerManagement project.
 }
 
 func Setup() *fiber.App {
