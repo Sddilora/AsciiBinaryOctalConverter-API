@@ -3,7 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -37,7 +37,7 @@ func TestConvertEndpoint(t *testing.T) {
 
 	// Check the response body
 	expected := `{"message":"01100100 01101001 01101100 01100001 01110010 01100001"}`
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -67,7 +67,7 @@ func TestConvertEndpoint(t *testing.T) {
 
 	// Check the response body
 	expected = `{"message":"144 151 154 141 162 141 060"}`
-	body, err = ioutil.ReadAll(resp.Body)
+	body, err = io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -97,7 +97,7 @@ func TestConvertEndpoint(t *testing.T) {
 
 	// Check the response body
 	expected = `{"message":"U"}`
-	body, err = ioutil.ReadAll(resp.Body)
+	body, err = io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -127,7 +127,7 @@ func TestConvertEndpoint(t *testing.T) {
 
 	// Check the response body
 	expected = `{"message":"125"}`
-	body, err = ioutil.ReadAll(resp.Body)
+	body, err = io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -157,7 +157,7 @@ func TestConvertEndpoint(t *testing.T) {
 
 	// Check the response body
 	expected = `{"message":"0"}`
-	body, err = ioutil.ReadAll(resp.Body)
+	body, err = io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -186,7 +186,7 @@ func TestConvertEndpoint(t *testing.T) {
 
 	// Check the response body
 	expected = `{"message":"00110000"}`
-	body, err = ioutil.ReadAll(resp.Body)
+	body, err = io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -214,7 +214,7 @@ func TestConvertEndpoint(t *testing.T) {
 
 	// Check the response body
 	expected = `{"error":"Bad Request"}`
-	body, err = ioutil.ReadAll(resp.Body)
+	body, err = io.ReadAll(resp.Body)
 	if err != nil {
 		t.Fatal(err)
 	}

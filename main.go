@@ -1,13 +1,12 @@
 package main
 
 import (
+	"api/converters"
 	"encoding/json"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-
-	"api/converters"
 )
 
 func main() {
