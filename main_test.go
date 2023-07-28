@@ -237,7 +237,7 @@ func TestMain(t *testing.T) {
 	})
 
 	// Sunucuya bir GET isteği gönderme
-	resp, err := http.Post("http://localhost:6027/convert", "application/json", bytes.NewBuffer(reqBody))
+	resp, err := http.Post("http://127.0.0.1:8080/convert", "application/json", bytes.NewBuffer(reqBody))
 	if err != nil {
 		t.Errorf("HTTP isteği gönderirken hata oluştu: %v", err)
 	}
